@@ -162,7 +162,7 @@ class AntAlg
         fin.close();
         return matrix;
     }
-    vector<vector<int>> getMatrix(int n) 
+    vector<vector<int>> getMatrix(int n)
     {
         vector<vector<int>> matrix(n, vector<int>(n));
         ifstream fin;
@@ -236,149 +236,155 @@ public:
     void FindSolution()
     {
         srand(time(NULL));
-        vector<vector<int>> matrOfRoad(this->ants+this->crazy_ants, vector<int>(this->countVert));
-        vector<double> matrOfLk;
-        for (int i = 0; i < ants; i++)
+        for (int i = 0; i < 1000; i++)
         {
-            int Lk=0;
-            double pij;
-            //int start_position = rand() % 250;
-            int start_position = rand() % 6;
-          //  cout << "Start pos = " << start_position << endl;
-            vector<int> checkedVert;
-            int sumOfRoad = 0;
-            int itr = 1;
-            matrOfRoad[i][0] = start_position;
-            while (checkedVert.size() <this->countVert)
-            {
-                if (checkedVert.size() + 1 == this->countVert)
-                {
-                   // matr[start_position][0] = 1;
-                    Lk += this->matrixDist[start_position][0];
 
-                    break;
-                }
-               
-                checkedVert.push_back(start_position);
-                double max = 1;
-               // vector<double> next_peak;
-                int nextVert = 0;
-                double sum = 0;
-                for (int j = 0; j < this->countVert; j++)
+
+            vector<vector<int>> matrOfRoad(this->ants + this->crazy_ants, vector<int>(this->countVert));
+            vector<double> matrOfLk;
+            for (int i = 0; i < ants; i++)
+            {
+                int Lk = 0;
+                double pij;
+                //int start_position = rand() % 250;
+                int start_position = rand() % 6;
+                //  cout << "Start pos = " << start_position << endl;
+                vector<int> checkedVert;
+                int sumOfRoad = 0;
+                int itr = 1;
+                matrOfRoad[i][0] = start_position;
+                while (checkedVert.size() < this->countVert)
                 {
-                    if (CheckVer(j, checkedVert))
+                    if (checkedVert.size() + 1 == this->countVert)
                     {
-                        sum += pow(this->smell[start_position][j],this->alpha)* pow(this->visible[start_position][j], this->beta);
+                        // matr[start_position][0] = 1;
+                        Lk += this->matrixDist[start_position][0];
+
+                        break;
                     }
-                }
-                double next_vertex_chance = (double)(rand() % 1000 + 1) / 1000;
-                for (int j = 0; j < this->countVert; j++)
-                {
-                    if (CheckVer(j, checkedVert))
+
+                    checkedVert.push_back(start_position);
+                    double max = 1;
+                    // vector<double> next_peak;
+                    int nextVert = 0;
+                    double sum = 0;
+                    for (int j = 0; j < this->countVert; j++)
                     {
-                        pij = (pow(this->smell[start_position][j], this->alpha) * pow(this->visible[start_position][j], this->beta)) / sum;
-                        if (max > abs(next_vertex_chance-pij))
+                        if (CheckVer(j, checkedVert))
                         {
-                            max = pij;
-                            sumOfRoad = this->matrixDist[start_position][j];
-                            nextVert = j;
+                            sum += pow(this->smell[start_position][j], this->alpha) * pow(this->visible[start_position][j], this->beta);
                         }
                     }
-                }
-                Lk += sumOfRoad;
-                matrOfRoad[i][itr]=nextVert;
-                ++itr;
-                start_position = nextVert;
-            }
-            matrOfLk.push_back(Lk);
-        }
-        for (int i = this->ants; i < this->crazy_ants+this->ants; i++)
-        {
-            int Lk = 0;
-            double pij;
-            //int start_position = rand() % 250;
-            int start_position = rand() % 6;
-          //  cout << "Start pos = " << start_position << endl;
-            vector<int> checkedVert;
-            int sumOfRoad = 0;
-            int itr = 1;
-            matrOfRoad[i][0] = start_position;
-            while (checkedVert.size() < this->countVert)
-            {
-                if (checkedVert.size() + 1 == this->countVert)
-                {
-                    // matr[start_position][0] = 1;
-                    Lk += this->matrixDist[start_position][0];
-
-                    break;
-                }
-
-                checkedVert.push_back(start_position);
-                int nextVert = 0;
-                int next_vertex_chance = rand()%6;
-                for (int j = 0; j < 1000; j++)
-                {
-                    next_vertex_chance = rand() % 6;
-                    if (CheckVer(next_vertex_chance, checkedVert))
+                    double next_vertex_chance = (double)(rand() % 1000 + 1) / 1000;
+                    for (int j = 0; j < this->countVert; j++)
                     {
+                        if (CheckVer(j, checkedVert))
+                        {
+                            pij = (pow(this->smell[start_position][j], this->alpha) * pow(this->visible[start_position][j], this->beta)) / sum;
+                            if (max > abs(next_vertex_chance - pij))
+                            {
+                                max = pij;
+                                sumOfRoad = this->matrixDist[start_position][j];
+                                nextVert = j;
+                            }
+                        }
+                    }
+                    Lk += sumOfRoad;
+                    matrOfRoad[i][itr] = nextVert;
+                    ++itr;
+                    start_position = nextVert;
+                }
+                matrOfLk.push_back(Lk);
+            }
+            for (int i = this->ants; i < this->crazy_ants + this->ants; i++)
+            {
+                int Lk = 0;
+                double pij;
+                //int start_position = rand() % 250;
+                int start_position = rand() % 6;
+                //  cout << "Start pos = " << start_position << endl;
+                vector<int> checkedVert;
+                int sumOfRoad = 0;
+                int itr = 1;
+                matrOfRoad[i][0] = start_position;
+                while (checkedVert.size() < this->countVert)
+                {
+                    if (checkedVert.size() + 1 == this->countVert)
+                    {
+                        // matr[start_position][0] = 1;
+                        Lk += this->matrixDist[start_position][0];
+
+                        break;
+                    }
+
+                    checkedVert.push_back(start_position);
+                    int nextVert = 0;
+                    int next_vertex_chance = rand() % 6;
+                    for (int j = 0; j < 1000; j++)
+                    {
+                        next_vertex_chance = rand() % 6;
+                        if (CheckVer(next_vertex_chance, checkedVert))
+                        {
                             sumOfRoad = this->matrixDist[start_position][next_vertex_chance];
                             nextVert = next_vertex_chance;
+                        }
                     }
+                    Lk += sumOfRoad;
+                    matrOfRoad[i][itr] = nextVert;
+                    ++itr;
+                    start_position = nextVert;
                 }
-                Lk += sumOfRoad;
-                matrOfRoad[i][itr] = nextVert;
-                ++itr;
-                start_position = nextVert;
+                matrOfLk.push_back(Lk);
             }
-            matrOfLk.push_back(Lk);
-        }
-        cout << "Matr of road \n";
-        for (int i = 0; i < this->ants+this->crazy_ants; i++)
-        {
-            for (int j = 0; j < 6; j++)
+          /*  cout << "Matr of road \n";
+            for (int i = 0; i < this->ants + this->crazy_ants; i++)
             {
-                cout << matrOfRoad[i][j] << " ";
-            }
-            cout << endl;
-        }
-        cout << "MatrixOfLk \n";
-        for (int i = 0; i < matrOfLk.size(); i++)
-        {
-            cout << matrOfLk[i] << " ";
-        }
-        cout << "\nSmell before\n";
-        for (int i = 0; i < smell.size(); i++)
-        {
-            for (int j = 0; j < smell.size(); j++)
+                for (int j = 0; j < 6; j++)
+                {
+                    cout << matrOfRoad[i][j] << " ";
+                }
+                cout << endl;
+            }*/
+           /* cout << "MatrixOfLk \n";
+            for (int i = 0; i < matrOfLk.size(); i++)
             {
-                cout << smell[i][j] << " ";
-            }
-            cout << endl;
-        }
-        for (int i = 0; i < smell.size(); i++)
-        {
-            for (int j = 0; j < smell.size(); j++)
+                cout << matrOfLk[i] << " ";
+            }*/
+            /*cout << "\nSmell before\n";
+            for (int i = 0; i < smell.size(); i++)
             {
-                if(i!=j)
-                smell[i][j]=(1-this->p)*smell[i][j];
-            }
-        }
-        cout << "\nSmell after1\n";
-        for (int i = 0; i < smell.size(); i++)
-        {
-            for (int j = 0; j < smell.size(); j++)
+                for (int j = 0; j < smell.size(); j++)
+                {
+                    cout << smell[i][j] << " ";
+                }
+                cout << endl;
+            }*/
+            for (int i = 0; i < smell.size(); i++)
             {
-                cout << smell[i][j] << " ";
+                for (int j = 0; j < smell.size(); j++)
+                {
+                    if (i != j)
+                        smell[i][j] = (1 - this->p) * smell[i][j];
+                }
             }
-            cout << endl;
-        }
-        for (int i = 0; i < this->ants + this->crazy_ants; i++)
-        {
-            for (int j = 0; j < 5; j++)
+           /* cout << "\nSmell after1\n";
+            for (int i = 0; i < smell.size(); i++)
             {
-                smell[matrOfRoad[i][j]][matrOfRoad[i][j + 1]] += this->Lmin/matrOfLk[i];
+                for (int j = 0; j < smell.size(); j++)
+                {
+                    cout << smell[i][j] << " ";
+                }
+                cout << endl;
+            }*/
+            for (int i = 0; i < this->ants + this->crazy_ants; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    smell[matrOfRoad[i][j]][matrOfRoad[i][j + 1]] += this->Lmin / matrOfLk[i];
+                }
+                smell[matrOfRoad[i][5]][matrOfRoad[i][0]] += this->Lmin / matrOfLk[i];
             }
-            smell[matrOfRoad[i][5]][matrOfRoad[i][0]] += this->Lmin / matrOfLk[i];
+           
         }
         cout << "Smell after2\n";
         for (int i = 0; i < smell.size(); i++)
